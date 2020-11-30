@@ -27,45 +27,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Kangaroos cannot jump here' );
 }
 
-// Include all the files that you want to load in here
-if ( defined( 'WP_CLI' ) ) {
-	require_once AI1WMUE_VENDOR_PATH .
-				DIRECTORY_SEPARATOR .
-				'servmask' .
-				DIRECTORY_SEPARATOR .
-				'command' .
-				DIRECTORY_SEPARATOR .
-				'class-ai1wm-backup-wp-cli-command.php';
+class Ai1wmue_Settings {
+
+	public function set_backups( $number ) {
+		return update_option( 'ai1wmue_backups', $number );
+	}
+
+	public function get_backups() {
+		return get_option( 'ai1wmue_backups', false );
+	}
+
+	public function set_total( $size ) {
+		return update_option( 'ai1wmue_total', $size );
+	}
+
+	public function get_total() {
+		return get_option( 'ai1wmue_total', false );
+	}
+
+	public function set_days( $days ) {
+		return update_option( 'ai1wmue_days', $days );
+	}
+
+	public function get_days() {
+		return get_option( 'ai1wmue_days', false );
+	}
 }
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-main-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-export-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-settings-controller.php';
-
-require_once AI1WMUE_MODEL_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-settings.php';
-
-require_once AI1WMUE_EXPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-export-retention.php';
-
-require_once AI1WMUE_IMPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-settings.php';
-
-require_once AI1WMUE_IMPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-database.php';

@@ -2,15 +2,15 @@
 /**
  * Plugin Name: All-in-One WP Migration Unlimited Extension
  * Plugin URI: https://servmask.com/
- * Description: Extension for All in One WP Migration that enables unlimited size exports and imports
+ * Description: Extension for All-in-One WP Migration that enables unlimited size exports and imports
  * Author: ServMask
  * Author URI: https://servmask.com/
- * Version: 2.12
+ * Version: 2.37
  * Text Domain: all-in-one-wp-migration-unlimited-extension
  * Domain Path: /languages
  * Network: True
  *
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,14 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
-@ignore_user_abort( true );
-@set_time_limit( 0 );
-@ini_set( 'max_input_time', '-1' );
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
+if ( is_multisite() ) {
+	// Multisite Extension shall be used instead
+	return;
+}
 
 // Check SSL Mode
 if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && ( $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) ) {
@@ -48,16 +53,19 @@ define( 'AI1WMUE_PLUGIN_BASENAME', basename( dirname( __FILE__ ) ) . '/' . basen
 // Plugin Path
 define( 'AI1WMUE_PATH', dirname( __FILE__ ) );
 
-// Plugin Url
+// Plugin URL
 define( 'AI1WMUE_URL', plugins_url( '', AI1WMUE_PLUGIN_BASENAME ) );
 
 // Include constants
 require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'constants.php';
 
+// Include functions
+require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'functions.php';
+
 // Include loader
 require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'loader.php';
 
-// ============================================================================
-// = All app initialization is done in Ai1wmue_Main_Controller __constructor. =
-// ============================================================================
+// ===========================================================================
+// = All app initialization is done in Ai1wmue_Main_Controller __constructor =
+// ===========================================================================
 $main_controller = new Ai1wmue_Main_Controller();

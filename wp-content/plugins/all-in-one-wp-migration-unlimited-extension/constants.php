@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,14 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 // ==================
 // = Plugin Version =
 // ==================
-define( 'AI1WMUE_VERSION', '2.12' );
+define( 'AI1WMUE_VERSION', '2.37' );
 
 // ===============
 // = Plugin Name =
@@ -42,6 +46,41 @@ define( 'AI1WMUE_LIB_PATH', AI1WMUE_PATH . DIRECTORY_SEPARATOR . 'lib' );
 // = Controller Path =
 // ===================
 define( 'AI1WMUE_CONTROLLER_PATH', AI1WMUE_LIB_PATH . DIRECTORY_SEPARATOR . 'controller' );
+
+// ==============
+// = Model Path =
+// ==============
+define( 'AI1WMUE_MODEL_PATH', AI1WMUE_LIB_PATH . DIRECTORY_SEPARATOR . 'model' );
+
+// ===============
+// = Export Path =
+// ===============
+define( 'AI1WMUE_EXPORT_PATH', AI1WMUE_MODEL_PATH . DIRECTORY_SEPARATOR . 'export' );
+
+// ===============
+// = Import Path =
+// ===============
+define( 'AI1WMUE_IMPORT_PATH', AI1WMUE_MODEL_PATH . DIRECTORY_SEPARATOR . 'import' );
+
+// =============
+// = View Path =
+// =============
+define( 'AI1WMUE_TEMPLATES_PATH', AI1WMUE_LIB_PATH . DIRECTORY_SEPARATOR . 'view' );
+
+// ===============
+// = Vendor Path =
+// ===============
+define( 'AI1WMUE_VENDOR_PATH', AI1WMUE_LIB_PATH . DIRECTORY_SEPARATOR . 'vendor' );
+
+// ==================
+// = Retention Path =
+// ==================
+define( 'AI1WMUE_RETENTION_NAME', 'retention.json' );
+
+// ===========================
+// = ServMask Activation URL =
+// ===========================
+define( 'AI1WMUE_ACTIVATION_URL', 'https://servmask.com/purchase/activations' );
 
 // =================
 // = Max File Size =

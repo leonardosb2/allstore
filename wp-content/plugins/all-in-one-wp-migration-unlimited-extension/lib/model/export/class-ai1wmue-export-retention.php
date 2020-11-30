@@ -27,45 +27,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Kangaroos cannot jump here' );
 }
 
-// Include all the files that you want to load in here
-if ( defined( 'WP_CLI' ) ) {
-	require_once AI1WMUE_VENDOR_PATH .
-				DIRECTORY_SEPARATOR .
-				'servmask' .
-				DIRECTORY_SEPARATOR .
-				'command' .
-				DIRECTORY_SEPARATOR .
-				'class-ai1wm-backup-wp-cli-command.php';
+class Ai1wmue_Export_Retention {
+	public static function execute( $params ) {
+		$backups = Ai1wm_Backups::get_files();
+		if ( count( $backups ) === 0 ) {
+			return $params; // No backups, no need to apply backup retention
+		}
+
+		// The order is very important - we delete files by date, by size, and finally by total count
+		self::delete_backups_older_than();
+		self::delete_backups_when_total_size_over();
+		self::delete_backups_when_total_count_over();
+
+		return $params;
+	}
+
+	private static function delete_backups_older_than() {
+		$backups = Ai1wm_Backups::get_files();
+		$days    = intval( get_option( 'ai1wmue_days', 0 ) );
+		if ( $days > 0 ) {
+			foreach ( $backups as $backup ) {
+				if ( $backup['mtime'] <= time() - $days * 86400 ) {
+					Ai1wm_Backups::delete_file( $backup['filename'] );
+				}
+			}
+		}
+	}
+
+	private static function delete_backups_when_total_size_over() {
+		$backups        = Ai1wm_Backups::get_files();
+		$retention_size = ai1wm_parse_size( get_option( 'ai1wmue_total', 0 ) );
+
+		// Get the size of the latest backup before we remove it
+		$size_of_backups = $backups[0]['size'];
+
+		// Remove the latest backup, the user should have at least one backup
+		array_shift( $backups );
+
+		if ( $retention_size > 0 ) {
+			foreach ( $backups as $backup ) {
+				if ( $size_of_backups + $backup['size'] > $retention_size ) {
+					Ai1wm_Backups::delete_file( $backup['filename'] );
+				} else {
+					$size_of_backups += $backup['size'];
+				}
+			}
+		}
+	}
+
+	private static function delete_backups_when_total_count_over() {
+		$backups = Ai1wm_Backups::get_files();
+		$limit   = intval( get_option( 'ai1wmue_backups', 0 ) );
+
+		if ( $limit > 0 ) {
+			if ( count( $backups ) > $limit ) {
+				for ( $i = $limit; $i < count( $backups ); $i++ ) {
+					Ai1wm_Backups::delete_file( $backups[ $i ]['filename'] );
+				}
+			}
+		}
+	}
 }
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-main-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-export-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-settings-controller.php';
-
-require_once AI1WMUE_MODEL_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-settings.php';
-
-require_once AI1WMUE_EXPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-export-retention.php';
-
-require_once AI1WMUE_IMPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-settings.php';
-
-require_once AI1WMUE_IMPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-database.php';

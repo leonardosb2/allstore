@@ -27,45 +27,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Kangaroos cannot jump here' );
 }
 
-// Include all the files that you want to load in here
-if ( defined( 'WP_CLI' ) ) {
-	require_once AI1WMUE_VENDOR_PATH .
-				DIRECTORY_SEPARATOR .
-				'servmask' .
-				DIRECTORY_SEPARATOR .
-				'command' .
-				DIRECTORY_SEPARATOR .
-				'class-ai1wm-backup-wp-cli-command.php';
+class Ai1wmue_Import_Settings {
+
+	public static function execute( $params ) {
+
+		// Set progress
+		Ai1wm_Status::info( __( 'Getting settings...', AI1WMUE_PLUGIN_NAME ) );
+
+		$settings = array(
+			'ai1wmue_backups' => get_option( 'ai1wmue_backups', false ),
+			'ai1wmue_total'   => get_option( 'ai1wmue_total', false ),
+			'ai1wmue_days'    => get_option( 'ai1wmue_days', false ),
+		);
+
+		// Save retention.json file
+		$handle = ai1wm_open( ai1wmue_retention_path( $params ), 'w' );
+		ai1wm_write( $handle, json_encode( $settings ) );
+		ai1wm_close( $handle );
+
+		// Set progress
+		Ai1wm_Status::info( __( 'Done getting settings.', AI1WMUE_PLUGIN_NAME ) );
+
+		return $params;
+	}
 }
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-main-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-export-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-controller.php';
-
-require_once AI1WMUE_CONTROLLER_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-settings-controller.php';
-
-require_once AI1WMUE_MODEL_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-settings.php';
-
-require_once AI1WMUE_EXPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-export-retention.php';
-
-require_once AI1WMUE_IMPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-settings.php';
-
-require_once AI1WMUE_IMPORT_PATH .
-			DIRECTORY_SEPARATOR .
-			'class-ai1wmue-import-database.php';
