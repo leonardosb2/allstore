@@ -8,7 +8,7 @@
  * @subpackage Shop Isle
  */
 ?>
-	sdafasdfasd
+	
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php
 
@@ -17,4 +17,7 @@
 	 */
 	do_action( 'shop_isle_page' );
 	?>
+	<div class="dropdown develoop-dropdown-cart">
+		<?php do_action("frosted_header_top"); ?>
+	</div>
 </article><!-- #post-## -->
